@@ -37,6 +37,22 @@ namespace Vaquinha.Unit.Tests.DomainTests
             doacao.ErrorMessages.Should().BeEmpty();
         }
 
+        [Fact] // caso de teste adicionado
+        [Trait("Doacao", "Doacao_UsuarioAceitaPagarComTaxa_DoacaoValida")] //organizar os testes
+        public void Doacao_UsuarioAceitaPagarComTaxa_DoacaoValida()
+        {
+            // Arrange
+            var doacao = _doacaoFixture.DoacaoValida(false, 5, false, true);
+            doacao.AdicionarEnderecoCobranca(_enderecoFixture.EnderecoValido());
+            doacao.AdicionarFormaPagamento(_cartaoCreditoFixture.CartaoCreditoValido());
+
+            // Act
+            var valido = doacao.Valido();
+
+            // Assert
+            doacao.Valor.Should().Be(6, because: "valor com taxa de 20%");
+        }
+
         [Fact]
         [Trait("Doacao", "Doacao_DadosPessoaisInvalidos_DoacaoInvalida")]
         public void Doacao_DadosPessoaisInvalidos_DoacaoInvalida()
